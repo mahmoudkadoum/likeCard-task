@@ -6,7 +6,7 @@ import { RouterLink, RouterView } from 'vue-router'
   <header>
     <div class="container nav-container">
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg"/>
-      <div class="wrapper">
+      <div class="wrapper" >
         <nav>
           <div class="nav-links">
         <RouterLink to="/">Home</RouterLink>
@@ -14,19 +14,31 @@ import { RouterLink, RouterView } from 'vue-router'
         <div class="dropdown">
           <button class="dropbtn">Resources</button>
           <div class="dropdown-content">
-            <a href="#">Resource1</a>
-            <a href="#">Resource2</a>
-            <a href="#">Resource3</a>
+            <RouterLink to="/">Resource1</RouterLink>
+            <RouterLink to="/">Resource2</RouterLink>
+            <RouterLink to="/">Resource3</RouterLink>
           </div>
         </div>
         <RouterLink to="/">Contacts</RouterLink>
           </div>
           <div class="nav-btns">
-        <button id="singnUp">Singn Up</button>
-        <button id="logIn">Log In</button>
+            <button id="singnUp">Singn Up</button>
+            <button id="logIn">Log In</button>
           </div>
         </nav>
       </div>
+      <div class="burgerMenu dropdown">
+          <button class="burgerMenuBtn">
+            <img src="./assets/burger-menu.svg" alt="">
+          </button>
+          <div class="dropdown-content">
+            <RouterLink to="/">Home</RouterLink>
+            <RouterLink to="/">Our Products</RouterLink>
+            <RouterLink to="/">Resources</RouterLink>
+            <RouterLink to="/">Contacts</RouterLink>
+          </div>
+      </div>
+      
     </div>
   </header>
 
@@ -125,11 +137,16 @@ nav a:first-of-type {
   outline: none;
   position: relative;
 }
+.burgerMenuBtn {
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
 .dropbtn::after {
   content: '';
   background-image: url('./assets/arrow-down.svg');
   position: absolute;
-  right: -25%;
+  right: -20%;
   top: 25%;
   background-size: 20px 20px;
   height: 20px;
@@ -144,6 +161,7 @@ nav a:first-of-type {
 
 .dropdown-content {
   display: none;
+  left: -125px;
   position: absolute;
   background-color: #f1f1f1;
   min-width: 160px;
@@ -162,11 +180,31 @@ nav a:first-of-type {
 
 .dropdown:hover .dropdown-content {display: block;}
 
+  header .wrapper {
+    display: none;
+  }
+
+
+@media (max-width: 1024px) {
+
+  .nav-container {
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+    .nav-container .logo {
+      margin: 0;
+    }
+}
 
 @media (min-width: 1024px) {
   header {
     display: flex;
   }
+
+.burgerMenuBtn {
+  display: none;
+}
 
   .logo {
     margin: 0 2rem 0 0;

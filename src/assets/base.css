@@ -6,12 +6,18 @@
 
   --color-gray-50: #5F6D7E;
   --color-gray-200: #272D37;
+  --color-gray-300: #2E3545;
+  --color-gray-600: #2C3444;
+  --color-gray-950: #151B28;
   
   --color-neutral-100: #F8F9FB;
+  --color-neutral-200: #F9F9F9;
   --color-neutral-600: #EAEBF0;
+  --color-neutral-800: #A5ACBA;
 
   --color-base-white: #FFF;
-
+  
+  --color-warnning: #ff4848;
 }
 
 /* Dark Mode */
