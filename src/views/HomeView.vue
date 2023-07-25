@@ -1,8 +1,11 @@
 <script setup>
+import { ref } from 'vue'
+import Footer from '../components/AppFooter.vue'
+import Model from '../components/CardPopup.vue'
+
 import img1 from '../assets/img1.png'
 import img2 from '../assets/img2.png'
 import img3 from '../assets/img3.png'
-
 
 import sec4_img1 from '../assets/sec4-img1.png'
 import sec4_img2 from '../assets/sec4-img2.png'
@@ -10,9 +13,6 @@ import sec4_img3 from '../assets/sec4-img3.png'
 import sec4_img4 from '../assets/sec4-img4.png'
 import sec4_img5 from '../assets/sec4-img5.png'
 import sec4_img6 from '../assets/sec4-img6.png'
-
-
-
 
 const sectionTwoCardList = [
 {
@@ -37,7 +37,6 @@ const sectionTwoCardList = [
   extra: '25 Apr 2022 ',
 }
 ];
-
 
 const sectionFourCardList = [
 {
@@ -77,6 +76,35 @@ const sectionFourCardList = [
   extra: '25 Apr 2022 ',
 }
 ];
+
+const email = ref('');
+const showError = ref(false)
+const isEmailVaild = ref(true)
+
+const checkEmail = ()=> {
+  showError.value = true
+  if(email.value) {
+    var mailformat = /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/;
+    if (email.value.match(mailformat)) {
+    isEmailVaild.value = true
+  } else {
+    isEmailVaild.value = false
+  }
+}
+};
+
+const isOpen = ref(false)
+const selectedCard = ref({})
+
+    const togglePopup = (card) => {
+        selectedCard.value = card
+        isOpen.value = !isOpen.value
+    };
+
+  const setIsOpen = (value) => {
+    isOpen.value = value
+  };
+
 </script>
 
 <template>
@@ -114,22 +142,28 @@ const sectionFourCardList = [
     <!-- Section 3 -->
     <div class="section-3">
       <div class="container">
-      <div>
-        <h1>Welcome to your new digital reality that will rock your world.</h1>
-        <p>
-          Let us help you take you from zero to serious business and beyond.
-          Our no-strings attached free trial lets you test our product today.
-        </p>
-      </div>
-      <div>
-        <div style="display: flex;flex-direction: column;gap:.5rem">
-          <div>
-            <input type="text" placeholder="Enter your email">
-            <button>Submit</button>
-          </div>
-          <p>Subscribe to our newsletter</p>
+        <div>
+          <h1>Welcome to your new digital reality that will rock your world.</h1>
+          <p>
+            Let us help you take you from zero to serious business and beyond.
+            Our no-strings attached free trial lets you test our product today.
+          </p>
         </div>
-      </div>
+        <div>
+          <div style="display: flex;flex-direction: column;gap:.5rem">
+            <div>
+              <input v-model="email" type="text" placeholder="Enter your email">
+              <button @click="checkEmail">Submit</button>
+              <Transition>              
+              <span v-if="showError && !email">Email Required!</span>
+              </Transition>
+              <Transition>              
+              <span v-if="showError && !isEmailVaild && !!email">Email Not Vaild!</span>
+              </Transition>
+            </div>
+            <p>Subscribe to our newsletter</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -138,11 +172,11 @@ const sectionFourCardList = [
       <h1>Latest Blog Posts</h1>
       <div class="cards">
         <div v-for="card in sectionFourCardList" :key="card.id" class="card">
-          <img :src="card.src" alt="" srcset="" loading='lazy'>
+          <img @click="togglePopup(card)" style="cursor: pointer;" :src="card.src" alt="" srcset="" loading='lazy'>
           <div>
             <p>{{card.extra}}</p>
             <h3>{{card.title}}</h3>
-            <button>
+            <button @click="togglePopup(card)" style="cursor: pointer;">
               <p>Learn more</p>
               <img src="../assets/arrow-right.svg" height="20" width="20" alt="">
             </button>
@@ -167,11 +201,25 @@ const sectionFourCardList = [
       </div>
     </div>
 
+    <Footer />
+    <Model :is-open="isOpen" :theCard="selectedCard" @set-is-open="setIsOpen"/>
+
   </main>
 </template>
 
 
 <style scoped>
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
 .section-1 {
   display: flex;
   flex-direction: column;
@@ -199,8 +247,10 @@ const sectionFourCardList = [
 
 .section-2{
   display: flex;
+  flex-direction: column;
   gap: 2.5rem;
   padding-block: 4rem;
+  max-width: 100vw;
 }
 
 .section-2 .card > div h3 {
@@ -226,6 +276,10 @@ const sectionFourCardList = [
   flex-direction: column;
   gap: 1rem;
 }
+.section-2 .first-card img {
+  max-width: 100%;
+  width: 100%;
+}
 .section-2 .cards {
   display: flex;
   flex-direction: column;
@@ -233,14 +287,12 @@ const sectionFourCardList = [
 }
 .section-2 .cards .card {
   display: flex;
+  flex-direction: column;
   gap: 1rem;
 }
 .section-2 .first-card,.cards {
   flex: 1;
 }
-
-
-
 
 
 .section-3 {
@@ -250,6 +302,7 @@ const sectionFourCardList = [
 
 .section-3 .container {
   display: flex;
+  flex-direction: column;
   gap: 1rem;
 }
 
@@ -274,10 +327,25 @@ color: var(--color-primary-50, #B1CCFB);
 
 .section-3 .container div:nth-child(2) {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
   gap: .5rem;
+}
+
+.section-3 .container div:nth-child(2) div {
+  position: relative;
+}
+.section-3 .container div:nth-child(2) div  {
+  position: relative;
+}
+.section-3 .container div:nth-child(2) div span {
+  margin-left: 1rem;
+  font-weight: 700;
+  color: var(--color-warnning, #ff4848);
+  filter: drop-shadow(0px 0px 8px #000000);
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  transform: translate(100%, -50%);
 }
 
 .section-3 .container div:nth-child(2) div input{
@@ -339,8 +407,8 @@ letter-spacing: -0.64px;
 }
 
 .section-4 .cards .card {
-  flex-basis: 31%;
-  width: 31%;
+  flex-basis: 45%;
+  width: 45%;
 }
 
 .section-4 .cards .card > img{
@@ -392,7 +460,7 @@ color: var(--color-gray-50, #5F6D7E);
   justify-content: center;
 }
 .section-5 .container .content{
-  width: 50%;
+  width: 75%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -448,20 +516,63 @@ color: var(--color-gray-50, #5F6D7E);
   transform: translateX(-50%);
   left: 50%;
   }
+
+  .section-2 .cards .card {
+  flex-direction: row;
+}
+
+
+  .section-2, .section-3 .container {
+    flex-direction: row;
   }
+  .section-3 .container div:nth-child(2) {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .section-4 .cards .card {
+  flex-basis: 31%;
+  width: 31%;
+}
+
+.section-5 .container .content{
+  width: 50%;
+
+}
+  }
+
+
   @media (min-width: 768px) and (max-width: 1023px) {
   .section-1::before {
   transform: translateX(-0%);
 }
 }
+
+
   @media (min-width: 600px) and (max-width: 767px) {
   .section-1::before {
   transform: translateX(-0%);
 }
 }
+
+
   @media (max-width: 600px) {
   .section-1::before {
   transform: translateX(-0%);
+}
+  .section-1 h1 {
+  font-size: 36px;
+  line-height: 44px;
+}
+
+.section-4 .cards .card {
+  flex-basis: 100%;
+  width: 100%;
+}
+
+.section-5 .container .content div{
+  flex-direction: column;
+  gap: 1rem;
 }
 }
 
