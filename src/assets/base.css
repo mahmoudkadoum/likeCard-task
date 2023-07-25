@@ -1,0 +1,43 @@
+/* semantic color variables */
+:root {
+  --color-primary-50: #B1CCFB;
+  --color-primary: #437EF7;
+  --color-primary-200: #2B63D9;
+
+  --color-gray-50: #5F6D7E;
+  --color-gray-200: #272D37;
+  
+  --color-neutral-100: #F8F9FB;
+  --color-neutral-600: #EAEBF0;
+
+  --color-base-white: #FFF;
+
+}
+
+/* Dark Mode */
+/* @media (prefers-color-scheme: dark) {
+  :root {
+
+  }
+} */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition: color 0.5s, background-color 0.5s;
+  line-height: 1.6;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
